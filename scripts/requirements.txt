@@ -1,0 +1,2 @@
+CairoSVG>=2.0.0rc6
+lxml==3.6.4

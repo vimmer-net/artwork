@@ -23,11 +23,23 @@ license.
 
 ## File Info
 
-The artwork was created using Adobe Illustrator CC.  Since the files in this
-repository are binary, we can't accept pull requests.  If you have fixes or
-changes you would like to propose, please create an issue instead.
+The artwork was created using Adobe Illustrator CC.  A script exports the SVG
+files from Illustrator.  The exported SVG files are used as the base graphics
+for colorization and rendering raster images.
 
-### Export Settings
+We can't accept pull requests for graphic sources since it would be difficult
+to review them at a glance.  If you have fixes or changes you would like to
+propose, please create an issue instead.  Pull requests for the automation
+scripts are welcome, however.
+
+## Exporting
+
+If you wish to color or render a raster image, you will get the most consistent
+results using the `scripts/build.py` script.  Arguments can be seen with
+`scripts/build.py --help`.  More detail can be found under [Palette](#Palette).
+
+If you want to export directly from Illustrator, these are the settings that
+are used by the export script:
 
 #### SVG
 
@@ -51,30 +63,69 @@ changes you would like to propose, please create an issue instead.
 | Background Color | Transparent                   |
 
 
-## Font
+
+## Presentation
+
+The logo faintly highlights three words that are topics of interest on
+`vimmer.net`:
+
+- `Vi` - The ancestor
+- `Vim` - The Vim text editor
+- `Vimmer` - You 😻
+
+It's styled to look like a Vim command that has an optional short form.
+
+#### Font
 
 - [Coda Regular](https://fonts.google.com/specimen/Coda)
 
-## Palette
+#### Palette
 
-The logo uses shades of web safe gray which allows it to be tinted easily.
+The logo's palette is currently undefined.  A grayscale palette is used
+for tinting/shading.  As of this writing, the brand consists of a single color
+whose white and black levels are averaged with grayscale colors used in the
+source graphic.  When used on dark backgrounds, the white and black levels are
+inverted to maintain a color prominence traveling from left to right.
 
-#### Light Background
+##### Used grayscale colors
 
-|                               | R   | G   | B   | Hex     |
-|-------------------------------|-----|-----|-----|---------|
-| ![](.meta/palette/light1.png) | 26  | 26  | 26  | #1a1a1a |
-| ![](.meta/palette/light2.png) | 77  | 77  | 77  | #4d4d4d |
-| ![](.meta/palette/light3.png) | 128 | 128 | 128 | #808080 |
+|                         | R   | G   | B   | Hex     |
+|-------------------------|-----|-----|-----|---------|
+| ![](.meta/palette1.png) | 51  | 51  | 51  | #333333 |
+| ![](.meta/palette2.png) | 102 | 102 | 102 | #666666 |
+| ![](.meta/palette3.png) | 153 | 153 | 153 | #999999 |
 
-#### Dark Background
+#### Colorizing
 
-|                              | R   | G   | B   | Hex     |
-|------------------------------|-----|-----|-----|---------|
-| ![](.meta/palette/dark1.png) | 102 | 102 | 102 | #666666 |
-| ![](.meta/palette/dark2.png) | 153 | 153 | 153 | #999999 |
-| ![](.meta/palette/dark3.png) | 204 | 204 | 204 | #cccccc |
-| ![](.meta/palette/dark4.png) | 51  | 51  | 51  | #333333 |
+Coloring the artwork is done through the `scripts/build.py` script.  The
+following images were colored with:
+
+```shell
+scripts/build.py color --in ${input}.svg --out ${output}.png --base-color $color --bg $bg
+```
+
+- `$input` is one of the SVG files in the `source/` directory.
+- `$output` is the output file.
+- `$color` is a hexadecimal color (shown below).
+- `$bg` is a value between `0` and `255` to produce a gray RGB triplet. For the
+  examples below:
+  - `255` for light backgrounds.
+  - `0` for dark backgrounds.
+
+If `--bg` is omitted, the background will be transparent and the colors will be
+treated as if the background is light.
+
+##### Taste the rainbow
+
+| `$color`  |                                          |                                         |                                          |                                         |
+|-----------|------------------------------------------|-----------------------------------------|------------------------------------------|-----------------------------------------|
+| `#ff0000` | ![](.meta/preview/icon_red_light.png)    | ![](.meta/preview/icon_red_dark.png)    | ![](.meta/preview/logo_red_light.png)    | ![](.meta/preview/logo_red_dark.png)    |
+| `#ff7f00` | ![](.meta/preview/icon_orange_light.png) | ![](.meta/preview/icon_orange_dark.png) | ![](.meta/preview/logo_orange_light.png) | ![](.meta/preview/logo_orange_dark.png) |
+| `#ffff00` | ![](.meta/preview/icon_yellow_light.png) | ![](.meta/preview/icon_yellow_dark.png) | ![](.meta/preview/logo_yellow_light.png) | ![](.meta/preview/logo_yellow_dark.png) |
+| `#00ff00` | ![](.meta/preview/icon_green_light.png)  | ![](.meta/preview/icon_green_dark.png)  | ![](.meta/preview/logo_green_light.png)  | ![](.meta/preview/logo_green_dark.png)  |
+| `#0000ff` | ![](.meta/preview/icon_blue_light.png)   | ![](.meta/preview/icon_blue_dark.png)   | ![](.meta/preview/logo_blue_light.png)   | ![](.meta/preview/logo_blue_dark.png)   |
+| `#4b0082` | ![](.meta/preview/icon_indigo_light.png) | ![](.meta/preview/icon_indigo_dark.png) | ![](.meta/preview/logo_indigo_light.png) | ![](.meta/preview/logo_indigo_dark.png) |
+| `#8b00ff` | ![](.meta/preview/icon_violet_light.png) | ![](.meta/preview/icon_violet_dark.png) | ![](.meta/preview/logo_violet_light.png) | ![](.meta/preview/logo_violet_dark.png) |
 
 ## Author
 
@@ -95,15 +146,15 @@ The logo uses shades of web safe gray which allows it to be tinted easily.
 [boring]: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 [vimmer]: http://vimmer.net
 [author]: https://github.com/tweekmonster
-[prev-logo-light]: .meta/preview/Vimmer_Logo_Light.png
-[prev-logo-dark]: .meta/preview/Vimmer_Logo_Dark.png
-[prev-icon-light]: .meta/preview/Vimmer_Icon_Light.png
-[prev-icon-dark]: .meta/preview/Vimmer_Icon_Dark.png
-[logo-light-svg]: svg/Vimmer_Logo_Light.svg?raw=true
-[logo-dark-svg]: svg/Vimmer_Logo_Dark.svg?raw=true
-[icon-light-svg]: svg/Vimmer_Icon_Light.svg?raw=true
-[icon-dark-svg]: svg/Vimmer_Icon_Dark.svg?raw=true
-[logo-light-png]: png/Vimmer_Logo_Light.png?raw=true
-[logo-dark-png]: png/Vimmer_Logo_Dark.png?raw=true
-[icon-light-png]: png/Vimmer_Icon_Light.png?raw=true
-[icon-dark-png]: png/Vimmer_Icon_Dark.png?raw=true
+[prev-logo-light]: .meta/preview/logo_light_light.png
+[prev-logo-dark]:  .meta/preview/logo_dark_dark.png
+[prev-icon-light]: .meta/preview/icon_light_light.png
+[prev-icon-dark]:  .meta/preview/icon_dark_dark.png
+[logo-light-svg]:  build/svg/logo_light.svg?raw=true
+[logo-dark-svg]:   build/svg/logo_dark.svg?raw=true
+[icon-light-svg]:  build/svg/icon_light.svg?raw=true
+[icon-dark-svg]:   build/svg/icon_dark.svg?raw=true
+[logo-light-png]:  build/png/logo_light.png?raw=true
+[logo-dark-png]:   build/png/logo_dark.png?raw=true
+[icon-light-png]:  build/png/icon_light.png?raw=true
+[icon-dark-png]:   build/png/icon_dark.png?raw=true
