@@ -122,7 +122,7 @@ def main():
             k = [k]
 
         for f in k:
-            build.cli_main(['color'] + args + ['--output', f])
+            build.cli_main(['color'] + args + ['--out', f])
 
     def gif_frame(name):
         img1 = Image.open(splash(name))
