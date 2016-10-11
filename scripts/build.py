@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+import math
 import argparse
 import colorsys
 
@@ -56,6 +57,12 @@ class Color(object):
             s = 1.0 - (val[1] / (1.0 - val[2]))
         v = 1.0 - val[2]
         self.r, self.g, self.b = colorsys.hsv_to_rgb(h, s, v)
+
+    @property
+    def luma(self):
+        return math.sqrt(self.r * self.r * 0.299 +
+                         self.g * self.g * 0.587 +
+                         self.b * self.b * 0.114)
 
     def invert_levels(self):
         """Invert white and black levels."""
@@ -239,11 +246,15 @@ def colorize(args, unknown):
     bg = None
     print('  Background:', args.bg is not None)
     if args.bg is not None:
-        bg = args.base_color.blend_hwb(Color([args.bg / 255] * 3))
+        if isinstance(args.bg, Color):
+            bg = args.bg
+        else:
+            bg = args.base_color.blend_hwb(Color([args.bg / 255] * 3))
         bg_hwb = bg.hwb
-        # If the whiteness is less than the blackness, the background is
-        # considered to be dark.
-        dark = bg_hwb[1] < bg_hwb[2]
+
+        # Darkness is based on the RGB luma.
+        dark = bg.luma < 0.4
+        print('  Luma: %f' % bg.luma)
         print('  White: %f, Black: %s' % (bg_hwb[1], bg_hwb[2]))
         print('  Dark Background: %r' % dark)
 
@@ -275,10 +286,20 @@ def colorize(args, unknown):
 
 
 def bg_color(val):
-    val = int(val)
-    if val < 0 or val > 255:
-        raise argparse.ArgumentTypeError('Value must be between 0 and 255')
-    return val
+    try:
+        val = int(val)
+        if val > -1 or val < 256:
+            return val
+    except ValueError:
+        pass
+
+    try:
+        return Color(val)
+    except ValueError:
+        pass
+
+    raise argparse.ArgumentTypeError('Value must be between 0 and 255 '
+                                     'or a color.')
 
 
 def cli_main(args):
@@ -298,7 +319,7 @@ def cli_main(args):
     color_a.add_argument('-c', '--base-color', type=Color, help='Base color.',
                          required=True)
     color_a.add_argument('-b', '--bg', type=bg_color,
-                         help='Background gray color. Between 0 and 255.')
+                         help='Between 0 and 255 (for grayscale) or a color.')
     color_a.add_argument('--hide', action='append', help='Elements to hide.')
 
     size = color_a.add_mutually_exclusive_group()
