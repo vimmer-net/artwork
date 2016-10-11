@@ -100,8 +100,18 @@ inverted to maintain a color prominence traveling from left to right.
 Coloring the artwork is done through the `scripts/build.py` script.  The
 following images were colored with:
 
-```shell
-scripts/build.py color --in ${input}.svg --out ${output}.png --base-color $color --bg $bg
+Installation:
+
+```
+$ virtualenv .
+$ . bin/activate
+$ pip3 install -r scripts/requirements.txt
+```
+
+Usage:
+
+```
+$ scripts/build.py color --in ${input}.svg --out ${output}.png --base-color $color --bg $bg
 ```
 
 - `$input` is one of the SVG files in the `source/` directory.
