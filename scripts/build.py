@@ -334,7 +334,7 @@ def cli_main(args):
                          help='DPI.')
     color_a.add_argument('-s', '--scale', type=float, default=1,
                          help='Scaling factor.  Between 0 and 1.')
-    color_a.add_argument('-o', '--output', help='Output file.', required=True,
+    color_a.add_argument('-o', '--out', help='Output file.', required=True,
                          dest='write_to')
     color_a.set_defaults(func=colorize)
 
